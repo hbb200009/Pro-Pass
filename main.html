@@ -2,8 +2,8 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Miraculous Pass Mobile</title>
     <style>
         :root {
             --primary: #ff004c;
@@ -14,98 +14,87 @@
         }
 
         body {
-            margin: 0; font-family: 'Arial Black', sans-serif;
+            margin: 0; font-family: sans-serif;
             background: radial-gradient(circle, #4a148c, #1a0033);
             color: white; display: flex; flex-direction: column;
-            align-items: center; min-height: 100vh; overflow: hidden;
+            align-items: center; height: 100vh; overflow: hidden;
+            -webkit-tap-highlight-color: transparent; /* Mobil tıklama gölgesini siler */
         }
 
-        .stats { display: flex; gap: 15px; margin-top: 20px; z-index: 10; }
+        .stats { display: flex; gap: 10px; margin-top: 15px; z-index: 10; }
         .stat {
-            padding: 8px 18px; border-radius: 12px;
-            text-align: center; border: 2px solid rgba(255,255,255,0.1);
-            background: rgba(0,0,0,0.5); font-size: 14px;
+            padding: 8px 15px; border-radius: 10px;
+            background: rgba(0,0,0,0.5); font-size: 12px; font-weight: bold;
         }
 
+        /* WebView Kaydırma Alanı */
         .pass-wrapper {
             flex: 1; width: 100%; overflow-x: auto; 
             display: flex; align-items: center;
             scroll-behavior: smooth; position: relative;
-            padding-bottom: 80px;
+            -webkit-overflow-scrolling: touch; /* iOS/Android akıcı kaydırma */
         }
         .pass-wrapper::-webkit-scrollbar { display: none; }
 
         .pass-content {
-            display: flex; gap: 40px; position: relative;
-            padding: 0 50vw; align-items: flex-end; height: 350px;
-            margin-left: -45%;
+            display: flex; gap: 80px; /* Mobilde arayı biraz daralttım */
+            position: relative; 
+            padding: 0 50%; /* vw yerine % kullanımı WebView'da daha güvenli */
+            align-items: flex-end; height: 300px;
         }
 
-        /* Ana Yol */
         .track-bg {
-            position: absolute; bottom: 45px; left: 50vw; right: 50vw;
-            height: 14px; background: var(--track); border-radius: 10px; z-index: 1;
-            width: calc(100% - 100px); transform: translateX(50px);
+            position: absolute; bottom: 45px; left: 50%; 
+            height: 12px; background: var(--track); border-radius: 10px; z-index: 1;
+            /* JS ile genişliği ayarlanacak */
         }
         .track-fill {
             position: absolute; top: 0; left: 0; height: 100%;
             background: linear-gradient(90deg, var(--progress), #ccff00);
-            border-radius: 10px; width: 0; 
-            transition: width 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.1);
-            box-shadow: 0 0 15px var(--progress);
+            border-radius: 10px; width: 0; transition: width 0.3s ease;
         }
 
         .tier {
             display: flex; flex-direction: column; align-items: center;
-            position: relative; z-index: 2; width: 100px;
+            position: relative; z-index: 2; width: 80px;
         }
 
         .reward {
-            width: 100px; height: 150px;
-            transform:skewX(-5deg);
-            background: rgba(255,255,255,0.1);
-            border-radius: 10px; display: flex; align-items: center;
-            justify-content: center;
-            margin-left: 20%;
-            margin-bottom: 115px; /* Daireye yer açmak için artırıldı */
-            border: 4px solid #444; box-shadow: 0 8px 0 #222;
-            transition: 0.3s; font-size: 11px; text-align: center;
+            width: 80px; height: 80px; background: rgba(255,255,255,0.1);
+            border-radius: 15px; display: flex; align-items: center;
+            justify-content: center; margin-bottom: 60px;
+            border: 3px solid #444; box-shadow: 0 5px 0 #222;
+            transition: 0.2s; font-size: 10px; text-align: center;
         }
 
         .reward.unlocked {
             background: linear-gradient(#ffd000, #ff8c00);
-            border-color: #fff; box-shadow: 0 8px 0 #b36b00;
-            color: #000; transform: scale(1.1);
+            border-color: #fff; box-shadow: 0 5px 0 #b36b00; color: #000;
         }
 
-        /* Küçültülmüş ve Yukarı Alınmış Daireler */
         .level-circle {
-            width: 40px; height: 40px; border-radius: 50%;
-            background: var(--secondary); border: 3px solid #fff;
+            width: 35px; height: 35px; border-radius: 50%;
+            background: var(--secondary); border: 2px solid #fff;
             display: flex; align-items: center; justify-content: center;
-            font-size: 16px; z-index: 5;
-            position: absolute; bottom: 32px; /* Çizginin biraz üzerinde durması için */
+            font-size: 14px; z-index: 5; position: absolute; bottom: 34px;
         }
 
-        /* Çizgi Altındaki Puan Etiketi - Tam Orta Odaklı */
         .floating-tag {
             position: absolute; background: var(--accent); color: black;
-            padding: 4px 14px; border-radius: 20px; font-weight: bold;
+            padding: 3px 10px; border-radius: 15px; font-weight: bold;
             bottom: 5px; transform: translateX(-50%); z-index: 10;
-            border: 2px solid white; font-size: 13px;
-            transition: left 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.1);
+            border: 2px solid white; font-size: 11px;
         }
 
         .buttons { 
-            display: flex; gap: 20px; margin-bottom: 40px; 
-            width: 90%; max-width: 500px; z-index: 10;
+            display: flex; gap: 10px; margin-bottom: 25px; 
+            width: 90%; z-index: 10;
         }
         button {
-            flex: 1; padding: 18px; border-radius: 18px; border: none;
-            font-family: 'Arial Black'; color: white; cursor: pointer;
-            box-shadow: 0 6px 0 rgba(0,0,0,0.4); transition: 0.1s; font-size: 16px;
+            flex: 1; padding: 15px; border-radius: 15px; border: none;
+            color: white; font-weight: bold; font-size: 14px;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.3);
         }
-        button:active { transform: translateY(4px); box-shadow: 0 2px 0 rgba(0,0,0,0.4); }
         .btn-green { background: #00c853; }
         .btn-red { background: #ff4444; }
     </style>
@@ -113,14 +102,14 @@
 <body>
 
 <div class="stats">
-    <div class="stat"><div id="dogru">0</div><small>DOĞRU</small></div>
-    <div class="stat"><div id="yanlis">0</div><small>YANLIŞ</small></div>
+    <div class="stat">DOĞRU: <span id="dogru">0</span></div>
+    <div class="stat">YANLIŞ: <span id="yanlis">0</span></div>
 </div>
 
-<div class="pass-wrapper">
+<div class="pass-wrapper" id="scrollArea">
     <div class="pass-content" id="passContent">
         <div id="statusTag" class="floating-tag">0/5</div>
-        <div class="track-bg">
+        <div class="track-bg" id="trackBg">
             <div class="track-fill" id="trackFill"></div>
         </div>
     </div>
@@ -130,7 +119,5 @@
     <button class="btn-green" onclick="ekle(1)">+1 PUAN</button>
     <button class="btn-red" onclick="ekle(-1)">-1 PUAN</button>
 </div>
-
 </body>
 </html>
-
