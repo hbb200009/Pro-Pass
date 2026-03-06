@@ -1,1 +1,136 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+        :root {
+            --primary: #ff004c;
+            --secondary: #1a1a1a;
+            --accent: #ffd000;
+            --track: #3a1188;
+            --progress: #00e676;
+        }
+
+        body {
+            margin: 0; font-family: 'Arial Black', sans-serif;
+            background: radial-gradient(circle, #4a148c, #1a0033);
+            color: white; display: flex; flex-direction: column;
+            align-items: center; min-height: 100vh; overflow: hidden;
+        }
+
+        .stats { display: flex; gap: 15px; margin-top: 20px; z-index: 10; }
+        .stat {
+            padding: 8px 18px; border-radius: 12px;
+            text-align: center; border: 2px solid rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.5); font-size: 14px;
+        }
+
+        .pass-wrapper {
+            flex: 1; width: 100%; overflow-x: auto; 
+            display: flex; align-items: center;
+            scroll-behavior: smooth; position: relative;
+            padding-bottom: 80px;
+        }
+        .pass-wrapper::-webkit-scrollbar { display: none; }
+
+        .pass-content {
+            display: flex; gap: 40px; position: relative;
+            padding: 0 50vw; align-items: flex-end; height: 350px;
+            margin-left: -45%;
+        }
+
+        /* Ana Yol */
+        .track-bg {
+            position: absolute; bottom: 45px; left: 50vw; right: 50vw;
+            height: 14px; background: var(--track); border-radius: 10px; z-index: 1;
+            width: calc(100% - 100px); transform: translateX(50px);
+        }
+        .track-fill {
+            position: absolute; top: 0; left: 0; height: 100%;
+            background: linear-gradient(90deg, var(--progress), #ccff00);
+            border-radius: 10px; width: 0; 
+            transition: width 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.1);
+            box-shadow: 0 0 15px var(--progress);
+        }
+
+        .tier {
+            display: flex; flex-direction: column; align-items: center;
+            position: relative; z-index: 2; width: 100px;
+        }
+
+        .reward {
+            width: 100px; height: 150px;
+            transform:skewX(-5deg);
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px; display: flex; align-items: center;
+            justify-content: center;
+            margin-left: 20%;
+            margin-bottom: 115px; /* Daireye yer açmak için artırıldı */
+            border: 4px solid #444; box-shadow: 0 8px 0 #222;
+            transition: 0.3s; font-size: 11px; text-align: center;
+        }
+
+        .reward.unlocked {
+            background: linear-gradient(#ffd000, #ff8c00);
+            border-color: #fff; box-shadow: 0 8px 0 #b36b00;
+            color: #000; transform: scale(1.1);
+        }
+
+        /* Küçültülmüş ve Yukarı Alınmış Daireler */
+        .level-circle {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: var(--secondary); border: 3px solid #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px; z-index: 5;
+            position: absolute; bottom: 32px; /* Çizginin biraz üzerinde durması için */
+        }
+
+        /* Çizgi Altındaki Puan Etiketi - Tam Orta Odaklı */
+        .floating-tag {
+            position: absolute; background: var(--accent); color: black;
+            padding: 4px 14px; border-radius: 20px; font-weight: bold;
+            bottom: 5px; transform: translateX(-50%); z-index: 10;
+            border: 2px solid white; font-size: 13px;
+            transition: left 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.1);
+        }
+
+        .buttons { 
+            display: flex; gap: 20px; margin-bottom: 40px; 
+            width: 90%; max-width: 500px; z-index: 10;
+        }
+        button {
+            flex: 1; padding: 18px; border-radius: 18px; border: none;
+            font-family: 'Arial Black'; color: white; cursor: pointer;
+            box-shadow: 0 6px 0 rgba(0,0,0,0.4); transition: 0.1s; font-size: 16px;
+        }
+        button:active { transform: translateY(4px); box-shadow: 0 2px 0 rgba(0,0,0,0.4); }
+        .btn-green { background: #00c853; }
+        .btn-red { background: #ff4444; }
+    </style>
+</head>
+<body>
+
+<div class="stats">
+    <div class="stat"><div id="dogru">0</div><small>DOĞRU</small></div>
+    <div class="stat"><div id="yanlis">0</div><small>YANLIŞ</small></div>
+</div>
+
+<div class="pass-wrapper">
+    <div class="pass-content" id="passContent">
+        <div id="statusTag" class="floating-tag">0/5</div>
+        <div class="track-bg">
+            <div class="track-fill" id="trackFill"></div>
+        </div>
+    </div>
+</div>
+
+<div class="buttons">
+    <button class="btn-green" onclick="ekle(1)">+1 PUAN</button>
+    <button class="btn-red" onclick="ekle(-1)">-1 PUAN</button>
+</div>
+
+</body>
+</html>
 
