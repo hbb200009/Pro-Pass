@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Miraculous Pass Mobile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Miraculous Pass Fixed</title>
     <style>
         :root {
             --primary: #ff004c;
@@ -14,89 +13,156 @@
             --progress: #00e676;
         }
 
+        /* Bozulmaları önlemek için body ayarları */
         body {
-            margin: 0; font-family: 'Arial', sans-serif;
+            margin: 0; padding: 0;
+            font-family: 'Arial', sans-serif;
             background: radial-gradient(circle, #4a148c, #1a0033);
-            color: white; display: flex; flex-direction: column;
-            align-items: center; height: 100vh; overflow: hidden;
+            color: white;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
             -webkit-user-select: none;
-            user-select: none;
         }
 
-        .stats { display: flex; gap: 10px; margin-top: 15px; z-index: 10; }
+        /* Üst Panel - Sabitlendi */
+        .stats { 
+            display: flex; 
+            justify-content: center;
+            gap: 10px; 
+            padding: 15px 0;
+            z-index: 100;
+        }
         .stat {
-            padding: 8px 15px; border-radius: 10px;
-            background: rgba(0,0,0,0.6); font-size: 12px; font-weight: bold;
-            border: 1px solid rgba(255,255,255,0.1);
+            padding: 8px 15px; 
+            border-radius: 10px;
+            background: rgba(0,0,0,0.7); 
+            font-size: 13px; 
+            font-weight: bold;
+            border: 1px solid var(--primary);
         }
 
+        /* Orta Alan - Pass Kaydırma Bölgesi */
         .pass-wrapper {
-            flex: 1; width: 100%; overflow-x: auto; 
-            display: flex; align-items: center;
-            scroll-behavior: smooth; position: relative;
+            flex: 1; /* Ekranın kalanını kaplar */
+            width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            display: flex;
+            align-items: center; /* Dikeyde ortala */
             -webkit-overflow-scrolling: touch;
+            position: relative;
         }
         .pass-wrapper::-webkit-scrollbar { display: none; }
 
         .pass-content {
-            display: flex; gap: 80px; position: relative; 
-            padding: 0 50%; align-items: flex-end; height: 320px;
-            min-width: max-content;
+            display: flex;
+            gap: 100px;
+            padding: 0 50vw; /* Ekranın tam ortasından başlar */
+            height: 250px;
+            align-items: flex-end;
+            position: relative;
         }
 
+        /* Mor Çizgi Yolu */
         .track-bg {
-            position: absolute; bottom: 50px; 
-            height: 12px; background: var(--track); border-radius: 10px; z-index: 1;
+            position: absolute;
+            bottom: 45px;
+            height: 10px;
+            background: var(--track);
+            border-radius: 10px;
+            z-index: 1;
         }
         .track-fill {
-            position: absolute; top: 0; left: 0; height: 100%;
-            background: linear-gradient(90deg, var(--progress), #ccff00);
-            border-radius: 10px; width: 0; transition: width 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+            position: absolute;
+            top: 0; left: 0; height: 100%;
+            background: var(--progress);
+            border-radius: 10px;
+            width: 0;
+            box-shadow: 0 0 10px var(--progress);
         }
 
         .tier {
-            display: flex; flex-direction: column; align-items: center;
-            position: relative; z-index: 2; width: 80px; flex-shrink: 0;
+            width: 80px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
         }
 
         .reward {
-            width: 80px; height: 80px; background: rgba(255,255,255,0.1);
-            border-radius: 15px; display: flex; align-items: center;
-            justify-content: center; margin-bottom: 65px;
-            border: 3px solid #444; box-shadow: 0 5px 0 #222;
-            transition: 0.2s; font-size: 10px; text-align: center;
+            width: 80px; height: 80px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 60px;
+            border: 3px solid #444;
+            font-size: 10px;
+            text-align: center;
+            transition: 0.3s;
         }
 
         .reward.unlocked {
-            background: linear-gradient(#ffd000, #ff8c00);
-            border-color: #fff; box-shadow: 0 5px 0 #b36b00; color: #000;
+            background: linear-gradient(var(--accent), #ff8c00);
+            color: black;
+            border-color: white;
+            transform: scale(1.1);
         }
 
         .level-circle {
-            width: 36px; height: 36px; border-radius: 50%;
-            background: var(--secondary); border: 2.5px solid #fff;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 14px; z-index: 5; position: absolute; bottom: 38px;
+            width: 35px; height: 35px;
+            border-radius: 50%;
+            background: var(--secondary);
+            border: 2px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            position: absolute;
+            bottom: 33px;
         }
 
+        /* 0/5 Yazısı */
         .floating-tag {
-            position: absolute; background: var(--accent); color: black;
-            padding: 4px 12px; border-radius: 20px; font-weight: bold;
-            bottom: 5px; transform: translateX(-50%); z-index: 10;
-            border: 2px solid white; font-size: 12px;
-            transition: left 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
-            pointer-events: none;
+            position: absolute;
+            background: var(--accent);
+            color: black;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-weight: bold;
+            bottom: 5px;
+            transform: translateX(-50%);
+            font-size: 12px;
+            z-index: 10;
+            border: 2px solid white;
+            white-space: nowrap;
         }
 
-        .buttons { 
-            display: flex; gap: 15px; margin-bottom: 30px; 
-            width: 90%; max-width: 400px; z-index: 10;
+        /* Alt Butonlar - Devleşmesi engellendi */
+        .buttons {
+            display: flex;
+            gap: 15px;
+            padding: 20px;
+            width: 100%;
+            box-sizing: border-box;
+            background: rgba(0,0,0,0.3);
         }
         button {
-            flex: 1; padding: 18px; border-radius: 15px; border: none;
-            color: white; font-weight: bold; font-size: 16px;
-            box-shadow: 0 4px 0 rgba(0,0,0,0.3); active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0,0,0,0.3); }
+            flex: 1;
+            height: 55px; /* Boyutu sabitledik */
+            border-radius: 15px;
+            border: none;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.4);
         }
+        button:active { transform: translateY(2px); box-shadow: none; }
         .btn-green { background: #00c853; }
         .btn-red { background: #ff4444; }
     </style>
@@ -114,7 +180,7 @@
         <div class="track-bg" id="trackBg">
             <div class="track-fill" id="trackFill"></div>
         </div>
-    </div>
+        </div>
 </div>
 
 <div class="buttons">
