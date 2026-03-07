@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Miraculous Pass Mobile</title>
     <style>
         :root {
@@ -14,56 +15,54 @@
         }
 
         body {
-            margin: 0; font-family: sans-serif;
+            margin: 0; font-family: 'Arial', sans-serif;
             background: radial-gradient(circle, #4a148c, #1a0033);
             color: white; display: flex; flex-direction: column;
             align-items: center; height: 100vh; overflow: hidden;
-            -webkit-tap-highlight-color: transparent; /* Mobil tıklama gölgesini siler */
+            -webkit-user-select: none;
+            user-select: none;
         }
 
         .stats { display: flex; gap: 10px; margin-top: 15px; z-index: 10; }
         .stat {
             padding: 8px 15px; border-radius: 10px;
-            width: 20%;
-            background: rgba(0,0,0,0.5); font-size: 12px; font-weight: bold;
+            background: rgba(0,0,0,0.6); font-size: 12px; font-weight: bold;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* WebView Kaydırma Alanı */
         .pass-wrapper {
             flex: 1; width: 100%; overflow-x: auto; 
             display: flex; align-items: center;
             scroll-behavior: smooth; position: relative;
-            -webkit-overflow-scrolling: touch; /* iOS/Android akıcı kaydırma */
+            -webkit-overflow-scrolling: touch;
         }
         .pass-wrapper::-webkit-scrollbar { display: none; }
 
         .pass-content {
-            display: flex; gap: 80px; /* Mobilde arayı biraz daralttım */
-            position: relative; 
-            padding: 0 50%; /* vw yerine % kullanımı WebView'da daha güvenli */
-            align-items: flex-end; height: 300px;
+            display: flex; gap: 80px; position: relative; 
+            padding: 0 50%; align-items: flex-end; height: 320px;
+            min-width: max-content;
         }
 
         .track-bg {
-            position: absolute; bottom: 45px; left: 50%; 
+            position: absolute; bottom: 50px; 
             height: 12px; background: var(--track); border-radius: 10px; z-index: 1;
-            /* JS ile genişliği ayarlanacak */
         }
         .track-fill {
             position: absolute; top: 0; left: 0; height: 100%;
             background: linear-gradient(90deg, var(--progress), #ccff00);
-            border-radius: 10px; width: 0; transition: width 0.3s ease;
+            border-radius: 10px; width: 0; transition: width 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
         }
 
         .tier {
             display: flex; flex-direction: column; align-items: center;
-            position: relative; z-index: 2; width: 80px;
+            position: relative; z-index: 2; width: 80px; flex-shrink: 0;
         }
 
         .reward {
             width: 80px; height: 80px; background: rgba(255,255,255,0.1);
             border-radius: 15px; display: flex; align-items: center;
-            justify-content: center; margin-bottom: 60px;
+            justify-content: center; margin-bottom: 65px;
             border: 3px solid #444; box-shadow: 0 5px 0 #222;
             transition: 0.2s; font-size: 10px; text-align: center;
         }
@@ -74,27 +73,29 @@
         }
 
         .level-circle {
-            width: 35px; height: 35px; border-radius: 50%;
-            background: var(--secondary); border: 2px solid #fff;
+            width: 36px; height: 36px; border-radius: 50%;
+            background: var(--secondary); border: 2.5px solid #fff;
             display: flex; align-items: center; justify-content: center;
-            font-size: 14px; z-index: 5; position: absolute; bottom: 34px;
+            font-size: 14px; z-index: 5; position: absolute; bottom: 38px;
         }
 
         .floating-tag {
             position: absolute; background: var(--accent); color: black;
-            padding: 3px 10px; border-radius: 15px; font-weight: bold;
+            padding: 4px 12px; border-radius: 20px; font-weight: bold;
             bottom: 5px; transform: translateX(-50%); z-index: 10;
-            border: 2px solid white; font-size: 11px;
+            border: 2px solid white; font-size: 12px;
+            transition: left 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+            pointer-events: none;
         }
 
         .buttons { 
-            display: flex; gap: 10px; margin-bottom: 25px; 
-            width: 90%; z-index: 10;
+            display: flex; gap: 15px; margin-bottom: 30px; 
+            width: 90%; max-width: 400px; z-index: 10;
         }
         button {
-            flex: 1; padding: 15px; border-radius: 15px; border: none;
-            color: white; font-weight: bold; font-size: 14px;
-            box-shadow: 0 4px 0 rgba(0,0,0,0.3);
+            flex: 1; padding: 18px; border-radius: 15px; border: none;
+            color: white; font-weight: bold; font-size: 16px;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.3); active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0,0,0,0.3); }
         }
         .btn-green { background: #00c853; }
         .btn-red { background: #ff4444; }
