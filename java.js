@@ -11,7 +11,7 @@ for(let i=0; i<=MAKS_KADEME; i++){
     let tier = document.createElement("div");
     tier.className = "tier";
     tier.id = "t" + i;
-    tier.innerHTML = <div class="reward" id="r${i}">MUCİZE ${i}</div><div class="level-circle">${i}</div>;
+    tier.innerHTML = '<div class="reward" id="r'+i+'">MUCİZE '+i+'</div><div class="level-circle">'+i+'</div>';
     content.appendChild(tier);
 }
 
