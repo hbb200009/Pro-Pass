@@ -6,7 +6,7 @@
     <title></title>
     <style>
         :root {
-            --primary: #ff004c;
+             --primary: #ff004c;
             --secondary: #1a1a1a;
             --accent: #0062e3;
             --track: black;
@@ -17,8 +17,7 @@
             margin: 0; font-family: 'Arial Black', sans-serif;
             background: linear-gradient(#007bff, #130052);
             color: white; display: flex; flex-direction: column;
-            align-items: center;
-            min-height: 100vh; overflow: hidden;
+            align-items: center; min-height: 100vh; overflow: hidden;
         }
 
         .stats { display: flex; gap: 25px; margin-top: -10px; margin-left: -45%; z-index: 10; }
@@ -105,9 +104,9 @@
             transition: left 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.1);
         }
 
-        .tt{ 
+        .buttons { 
             display: flex; gap: 20px; margin-bottom: 40px; 
-            width: 50%; max-width: 500px; z-index: 10;
+            width: 90%; max-width: 500px; z-index: 10;
         }
         button {
             flex: 1; padding: 18px; border-radius: 18px; border: none;
@@ -115,7 +114,6 @@
             box-shadow: 0 6px 0 rgba(0,0,0,0.4); transition: 0.1s; font-size: 16px;
         }
         button:active { transform: translateY(4px); box-shadow: 0 2px 0 rgba(0,0,0,0.4); }
-
         .btn-green { 
             background: #00c853;
             float: right;
@@ -149,10 +147,9 @@
 </head>
 <body>
 <!--<img src="images/pass/Beta_Background.webp" alt="" class="bg">-->
-
 <div class="stats">
-    <div class="stat"><div id="dogru" style="margin-top: 35%;">0</div></div>
-    <div class="stat"><div id="yanlis" style="margin-top: 35%;">0</div></div>
+    <div class="stat"><div id="dogru">0</div></div>
+    <div class="stat"><div id="yanlis">0</div></div>
 </div>
 
 <div class="pass-wrapper">
