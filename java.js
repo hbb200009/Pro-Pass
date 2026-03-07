@@ -1,7 +1,7 @@
 let dogruSay = parseInt(localStorage.getItem("dogru")) || 0;
 let yanlisSay = parseInt(localStorage.getItem("yanlis")) || 0;
 let passPuan = parseInt(localStorage.getItem("passPuan")) || 0;
-const MAKS_KADEME = 100;
+const MAKS_KADEME = 10;
 const PUAN_PER_KADEME = 5;
 
 dogruSay = dogruSay = 0;
