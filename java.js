@@ -4,9 +4,9 @@ let passPuan = parseInt(localStorage.getItem("passPuan")) || 0;
 const MAKS_KADEME = 100;
 const PUAN_PER_KADEME = 5;
 
-// dogruSay = dogruSay = 0;
-// yanlisSay = yanlisSay = 0;
-// passPuan = passPuan = 0;
+dogruSay = dogruSay = 0;
+yanlisSay = yanlisSay = 0;
+passPuan = passPuan = 0;
 
 const content = document.getElementById("passContent");
 
