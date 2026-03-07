@@ -6,12 +6,12 @@ const PUAN_PER_KADEME = 5;
 
 const content = document.getElementById("passContent");
 
-// 100 Kademe Oluştur
+// Kademe Oluşturma
 for(let i=0; i<=MAKS_KADEME; i++){
     let tier = document.createElement("div");
     tier.className = "tier";
     tier.id = "t" + i;
-    tier.innerHTML = '<div class="reward" id="r'+i+'">MUCİZE '+i+'</div><div class="level-circle">'+i+'</div>';
+    tier.innerHTML = `<div class="reward" id="r${i}">MUCİZE ${i}</div><div class="level-circle">${i}</div>`;
     content.appendChild(tier);
 }
 
@@ -33,38 +33,47 @@ function guncelle() {
         }
     }
 
+    // WebView için güvenli hesaplama
     const t0 = document.getElementById("t0");
+    const lastT = document.getElementById("t" + MAKS_KADEME);
     const currentT = document.getElementById("t" + Math.min(kademe, MAKS_KADEME));
     const nextT = document.getElementById("t" + Math.min(kademe + 1, MAKS_KADEME));
-    const lastT = document.getElementById("t" + MAKS_KADEME);
 
-    // Track genişliğini ayarla
-    const totalTrackWidth = lastT.offsetLeft - t0.offsetLeft;
-    document.getElementById("trackBg").style.width = totalTrackWidth + "px";
-    document.getElementById("trackBg").style.left = (t0.offsetLeft + t0.offsetWidth/2) + "px";
+    // Track hizalama
+    const trackBg = document.getElementById("trackBg");
+    const trackFill = document.getElementById("trackFill");
+    
+    const startX = t0.offsetLeft + (t0.offsetWidth / 2);
+    const endX = lastT.offsetLeft + (lastT.offsetWidth / 2);
+    
+    trackBg.style.left = startX + "px";
+    trackBg.style.width = (endX - startX) + "px";
 
-    // İlerleme
-    let progressX = currentT.offsetLeft - t0.offsetLeft;
+    // İlerleme hesaplama
+    let currentMid = currentT.offsetLeft + (currentT.offsetWidth / 2);
+    let fillWidth = currentMid - startX;
+
     if (kademe < MAKS_KADEME) {
-        let step = (nextT.offsetLeft - currentT.offsetLeft) / PUAN_PER_KADEME;
-        progressX += (step * kalan);
+        let gap = (nextT.offsetLeft - currentT.offsetLeft);
+        fillWidth += (gap * (kalan / PUAN_PER_KADEME));
     }
-    document.getElementById("trackFill").style.width = progressX + "px";
+    trackFill.style.width = fillWidth + "px";
 
-    // Tag (0/5)
+    // Etiket (0/5) konumu - Tam Orta
     const tag = document.getElementById("statusTag");
-    let mid;
+    let tagMid;
     if(kademe < MAKS_KADEME) {
-        mid = (currentT.offsetLeft + nextT.offsetLeft) / 2 + (currentT.offsetWidth / 2);
+        tagMid = (currentT.offsetLeft + nextT.offsetLeft) / 2 + (currentT.offsetWidth / 2);
     } else {
-        mid = currentT.offsetLeft + (currentT.offsetWidth / 2);
+        tagMid = currentMid;
     }
-    tag.style.left = mid + "px";
+    tag.style.left = tagMid + "px";
     tag.innerText = kalan + "/5";
 
-    // Scroll Odaklama (Mobilde merkeze alması için)
+    // Otomatik odaklama
     currentT.scrollIntoView({ behavior: 'smooth', inline: 'center' });
 
+    // Verileri kaydet
     localStorage.setItem("dogru", dogruSay);
     localStorage.setItem("yanlis", yanlisSay);
     localStorage.setItem("passPuan", passPuan);
@@ -72,13 +81,20 @@ function guncelle() {
 
 function ekle(v) {
     if(v > 0) {
-        if(passPuan < MAKS_KADEME * PUAN_PER_KADEME) { dogruSay++; passPuan++; }
+        if(passPuan < MAKS_KADEME * PUAN_PER_KADEME) { 
+            dogruSay++; 
+            passPuan++; 
+        }
     } else {
-        // -1 puanı sadece istatistik için bıraktım, kademeden düşürmez (isteğin üzerine)
         yanlisSay++;
     }
     guncelle();
 }
 
-window.onload = () => setTimeout(guncelle, 100); // WebView yüklenmesi için kısa gecikme
-window.onresize = guncelle;
+// WebView'ın hazır olmasını bekle
+window.addEventListener('load', () => {
+    setTimeout(guncelle, 300);
+});
+
+// Ekran dönerse veya boyut değişirse tekrar hesapla
+window.addEventListener('resize', guncelle);
