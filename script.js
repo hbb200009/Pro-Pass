@@ -1,29 +1,4 @@
 checkSeasonReset();
-            //YÜKLEME EKRANI
-            let percent = 0;
-            let interval = setInterval(()=>{
-
-                percent += Math.random()*10; 
-
-                if(percent >= 100){
-                    percent = 100;
-                    clearInterval(interval);
-
-                    setTimeout(()=>{
-                        document.getElementById("loadingScreen").style.opacity = "0";
-
-                        setTimeout(()=>{
-                            document.getElementById("loadingScreen").style.display="none";
-                        },500);
-
-                    },500);
-                }
-
-                document.getElementById("loadingPercent").innerText = Math.floor(percent)+"%";
-                document.getElementById("loadingFill").style.width = percent+"%"; 
-
-            },100);
-
             //DATA İLE ALMA
             let sifirlama = parseInt(localStorage.getItem("sifirlama")) || 0;
             let dogruSay = parseInt(localStorage.getItem("dogru")) || 0;  
@@ -35,6 +10,10 @@ checkSeasonReset();
             let gorev2 = parseInt(localStorage.getItem("gorev_2")) || 0;
             let gorev3 = parseInt(localStorage.getItem("gorev_3")) || 0;
             let gorev4 = parseInt(localStorage.getItem("gorev_4")) || 0;
+            let gorev5 = parseInt(localStorage.getItem("gorev_5")) || 0;
+            let gorev6 = parseInt(localStorage.getItem("gorev_6")) || 0;
+            let gorev7 = parseInt(localStorage.getItem("gorev_7")) || 0;
+            let gorev8 = parseInt(localStorage.getItem("gorev_8")) || 0;
 
             const MAKS_KADEME = 100;  
             const PUAN_PER_KADEME = 2;  
@@ -43,7 +22,8 @@ checkSeasonReset();
            // yanlisSay = yanlisSay = 0;  
            // passPuan = passPuan = 0;   
            // rank = rank = 0;
-           // costume = costume = 0;    
+           // costume = costume = 0;  
+           // gems = gems = 0;  
             
             //localStorage.setItem("gorev_1", 0); 
             //localStorage.setItem("gorev_2", 0);
@@ -115,21 +95,13 @@ checkSeasonReset();
                 let txt = r.querySelector(".reward-text");
                 if(i <= kademe && passPuan > 0) {
                     r.classList.add("unlocked");
-                    if(i == 0) {
+                    if(i == 0 || i == 10 || i == 30 || i == 60 || i == 100) {
                         txt.innerText = "DEKOR YÜKSELTMESI TOPLANDI!";
+                    } 
+                    else if(i == 14 || i == 21 || i == 34 || i == 41 || i == 54 || i == 61 || i == 74 || i == 81 || i == 94 || i == 98) {
+                        txt.innerText = "5 ELMAS ALINDI!";
                     }
-                    else if(i == 10) {
-                        txt.innerText = "DEKOR YÜKSELTMESI TOPLANDI!";
-                    }
-                    else if(i == 30) {
-                        txt.innerText = "DEKOR YÜKSELTMESI TOPLANDI!";
-                    }
-                    else if(i == 60) {
-                        txt.innerText = "DEKOR YÜKSELTMESI TOPLANDI!";
-                    }
-                    else if(i == 100) {
-                        txt.innerText = "DEKOR YÜKSELTMESI TOPLANDI!";
-                    } else {
+                     else {
                         txt.innerText = tmm + " Puan Tamamlandı!";
                     }
                     
@@ -137,22 +109,15 @@ checkSeasonReset();
                     
                 } else {
                     r.classList.remove("unlocked");
-                    txt.innerText = "Bu kademeyi açmak için " + tmm+ " puan daha gerekli";
                     circle.classList.remove("active");
-                    if(tmm == 0) {
-                        txt.innerText = "DEKOR YÜKSELTMESI!";
+                    if(tmm == 0 || tmm == 20 || tmm == 60 || tmm == 120 || tmm == 200) {
+                        txt.innerText = "DEKOR YÜKSELTMESI";
                     }
-                    if(tmm == 20) {
-                        txt.innerText = "DEKOR YÜKSELTMESI!";
+                    else if(tmm == 28 || tmm == 42 || tmm == 68 || tmm == 82 || tmm == 108 || tmm == 122 || tmm == 148 || tmm == 162 || tmm == 188 || tmm == 196) {
+                        txt.innerText = "+5 ELMAS";
                     }
-                    if(tmm == 60) {
-                        txt.innerText = "DEKOR YÜKSELTMESI!";
-                    }
-                    if(tmm == 120) {
-                        txt.innerText = "DEKOR YÜKSELTMESI!";
-                    }
-                    if(tmm == 200) {
-                        txt.innerText = "DEKOR YÜKSELTMESI!";
+                    else{
+                        txt.innerText = "Bu kademeyi açmak için " + tmm+ " puan daha gerekli";
                     }
                 }
             }
@@ -239,6 +204,10 @@ checkSeasonReset();
                         changeItem(3);
                         changeItem(4);
                         changeItem(5);
+                    }
+                    if(passPuan == 28 || passPuan == 42 || passPuan == 68 || passPuan == 82 || passPuan == 108 || passPuan == 122 || passPuan == 148 || passPuan == 162 || passPuan == 188 || passPuan == 196) {
+                        gems+=5;
+                        updateGems();
                     }
                     if(rank >= 0 && rank < 3000){
                         rank+=50;
@@ -413,17 +382,17 @@ checkSeasonReset();
             
             if(id == 1){
                 if(costume >= 1){
-                    img.src = "https://raw.githubusercontent.com/hbb200009/Pro-Pass/refs/heads/main/level1.png";
+                    img.src = "https://raw.githubusercontent.com/hbb200009/Pro-Pass/refs/heads/main/pro/S3-level1.png";
                     text.innerText = "";
                     c1.classList.add("reward_button2");
                     c1.classList.remove("reward_button");
                 } else if(costume >= 0){
-                    img.src = "https://raw.githubusercontent.com/hbb200009/Pro-Pass/refs/heads/main/level1.png";
+                    img.src = "https://raw.githubusercontent.com/hbb200009/Pro-Pass/refs/heads/main/pro/S3-level1.png";
                     text.innerText = "Daha fazla dekor yükseltmesi topla";
                     c5.classList.add("reward_button");
                     c5.classList.remove("reward_button2");
                 } else{
-                    img.src = "https://raw.githubusercontent.com/hbb200009/Pro-Pass/refs/heads/main/level1.png";
+                    img.src = "https://raw.githubusercontent.com/hbb200009/Pro-Pass/refs/heads/main/pro/S3-level1.png";
                     text.innerText = "Daha fazla dekor yükseltmesi topla";
                     c1.classList.add("reward_button");
                     c1.classList.remove("reward_button2");
@@ -433,12 +402,12 @@ checkSeasonReset();
 
             if(id == 2){
                 if(costume >= 2){
-                    img.src = "https://raw.githubusercontent.com/hbb200009/Pro-Pass/refs/heads/main/level2.png";
+                    img.src = "https://raw.githubusercontent.com/hbb200009/Pro-Pass/refs/heads/main/pro/S3-level2.png";
                     text.innerText = "";
                     c2.classList.add("reward_button2");
                     c2.classList.remove("reward_button");
                 } else{
-                    img.src = "https://raw.githubusercontent.com/hbb200009/Pro-Pass/refs/heads/main/level2.png";
+                    img.src = "https://raw.githubusercontent.com/hbb200009/Pro-Pass/refs/heads/main/pro/S3-level2.png";
                     text.innerText = "Daha fazla dekor yükseltmesi topla";
                     c2.classList.add("reward_button");
                     c2.classList.remove("reward_button2");
@@ -447,12 +416,12 @@ checkSeasonReset();
 
             if(id == 3){
                 if(costume >= 3){
-                    img.src = "https://raw.githubusercontent.com/hbb200009/Pro-Pass/refs/heads/main/level3.jpg";
+                    img.src = "https://raw.githubusercontent.com/hbb200009/Pro-Pass/refs/heads/main/pro/S3-level3.png";
                     text.innerText = "";
                     c3.classList.add("reward_button2");
                     c3.classList.remove("reward_button");
                 } else{
-                    img.src = "https://raw.githubusercontent.com/hbb200009/Pro-Pass/refs/heads/main/level3.jpg";
+                    img.src = "https://raw.githubusercontent.com/hbb200009/Pro-Pass/refs/heads/main/pro/S3-level3.png";
                     text.innerText = "Daha fazla dekor yükseltmesi topla";
                     c3.classList.add("reward_button");
                     c3.classList.remove("reward_button2");
@@ -461,12 +430,12 @@ checkSeasonReset();
 
             if(id == 4){
                 if(costume >= 4){
-                    img.src = "https://raw.githubusercontent.com/hbb200009/Pro-Pass/refs/heads/main/level4.png";
+                    img.src = "https://raw.githubusercontent.com/hbb200009/Pro-Pass/refs/heads/main/pro/S3-level4.png";
                     text.innerText = "";
                     c4.classList.add("reward_button2");
                     c4.classList.remove("reward_button");
                 } else{
-                    img.src = "https://raw.githubusercontent.com/hbb200009/Pro-Pass/refs/heads/main/level4.png";
+                    img.src = "https://raw.githubusercontent.com/hbb200009/Pro-Pass/refs/heads/main/pro/S3-level4.png";
                     text.innerText = "Daha fazla dekor yükseltmesi topla";
                     c4.classList.add("reward_button");
                     c4.classList.remove("reward_button2");
@@ -475,12 +444,12 @@ checkSeasonReset();
 
             if(id >= 5){
                 if(costume >= 5){
-                    img.src = "https://raw.githubusercontent.com/hbb200009/Pro-Pass/refs/heads/main/level5.jpg";
+                    img.src = "https://raw.githubusercontent.com/hbb200009/Pro-Pass/refs/heads/main/pro/S3-level5.jpg";
                     text.innerText = "";
                     c5.classList.add("reward_button2");
                     c5.classList.remove("reward_button");
                 }  else{
-                    img.src = "https://raw.githubusercontent.com/hbb200009/Pro-Pass/refs/heads/main/level5.jpg";
+                    img.src = "https://raw.githubusercontent.com/hbb200009/Pro-Pass/refs/heads/main/pro/S3-level5.jpg";
                     text.innerText = "Daha fazla dekor yükseltmesi topla";
                     c5.classList.add("reward_button");
                     c5.classList.remove("reward_button2");
@@ -574,6 +543,128 @@ checkSeasonReset();
 
             updateGorevler();
 
+            let gems = parseInt(localStorage.getItem("gems")) || 0;
+
+            function updateGems(){
+                document.getElementById("gemCount").innerText = gems;
+                localStorage.setItem("gems", gems);
+            }
+            updateGems();
+            const shopItems = [
+            {
+                id:1,
+                name:"Miraculous", 
+                price:149,
+                image:"https://raw.githubusercontent.com/hbb200009/Pro-Pass/refs/heads/main/skins/9.jpg",
+                startDate:"2026-03-30 8:00"
+            },
+            {
+                id:2,
+                name:"Penny",
+                price:29,
+                image:"https://raw.githubusercontent.com/hbb200009/Pro-Pass/refs/heads/main/skins/27.jpg",
+                startDate:"2026-04-01 8:00"
+            },
+            {
+                id:3,
+                name:"Draco",
+                price:29,
+                image:"https://raw.githubusercontent.com/hbb200009/Pro-Pass/refs/heads/main/skins/29.jpg",
+                startDate:"2026-04-02 8:00"
+            },
+            {
+                id:4,
+                name:"Piper",
+                price:29,
+                image:"https://raw.githubusercontent.com/hbb200009/Pro-Pass/refs/heads/main/skins/30.jpg",
+                startDate:"2026-04-03 8:00"
+            }
+            ];
+            localStorage.removeItem("bought_1");
+            localStorage.removeItem("bought_2");
+            localStorage.removeItem("bought_3");
+            localStorage.removeItem("bought_4");
+
+            function renderShop(){
+                const shop = document.getElementById("shop");
+                shop.innerHTML = "";
+                shop.className = "shop-container";
+
+                let now = new Date();
+
+                shopItems.forEach(item => {
+
+                    let bought = localStorage.getItem("bought_"+item.id);
+
+                    if(bought) return;
+
+                    let start = new Date(item.startDate);
+                    let diff = start - now;
+
+                    let card = document.createElement("div");
+                    card.className = "shop-card";
+
+                    let timeText = "";
+                    let available = false;
+
+                    if(diff > 0){
+                        let sec = Math.floor(diff/1000);
+                        let min = Math.floor(sec/60);
+                        let hour = Math.floor(min/60);
+
+                        timeText = hour+"s "+(min%60)+"dk";
+                    }else{
+                        timeText = "SATIN AL";
+                        available = true;
+                    }
+
+                    card.innerHTML = `
+                        <div class="shop-top"></div>
+
+                        <img src="${item.image}" class="shop-img" onclick="sound_button()">
+   
+                        <div class="shop-name">${item.name}</div>
+
+                        <div class="shop-bottom">
+                            <button class="shop-btn ${!available ? 'locked':''}" 
+                            onclick="buyItem(${item.id}), sound_button()" ${!available ? 'disabled':''}>
+                            
+                            ${available 
+                                ? `<img src="images/pass/Elmas.svg" class="shopGem"> ${item.price}` 
+                                : `${timeText}`
+                            }
+
+                            </button>
+                        </div>
+
+
+                    `;
+
+                    shop.appendChild(card);
+                });
+            }
+
+            function buyItem(id){
+                let item = shopItems.find(i => i.id == id);
+
+                if(gems >= item.price){
+                    gems -= item.price;
+                    localStorage.setItem("gems", gems);
+
+                    localStorage.setItem("bought_"+id, true);
+
+                    alert("ödeme işlemi başarıyla gerçekleşti.");
+  
+                    renderShop();
+                }else{
+                    alert("Ödeme başarısız oldu. Elmas yetersiz!");
+                }
+                updateGems();
+            }
+            setInterval(renderShop, 1000);
+            renderShop();
+
+
             //SES AYARLARI / SESLER / SES AYARLARI / SESLER / SES AYARLARI / SESLER
             const music = document.getElementById('sound-bg');
             function toggleMusic() {
@@ -617,5 +708,5 @@ checkSeasonReset();
 
             // İlk yükleme
             updateRankDisplay();
-            setInterval(updateSeasonTimer,1000);
+            setInterval(updateSeasonTimer,1000); 
             updateSeasonTimer();
